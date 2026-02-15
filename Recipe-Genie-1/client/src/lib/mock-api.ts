@@ -1,6 +1,6 @@
 import { Recipe, GenerateRequest } from "./types";
 
-export const API_BASE_URL = "https://late-cloud-3f0c.adilsoumebati.workers.dev";
+export const API_BASE_URL = "https://late-cloud-3f0c.adlisoumbati.workers.dev";
 
 // Mock data for fallback/demo purposes
 const MOCK_RECIPES: Record<string, Recipe> = {
@@ -28,31 +28,28 @@ const MOCK_RECIPES: Record<string, Recipe> = {
     ],
     prepTime: "10 mins",
     cookTime: "20 mins",
-    servings: 2,
-    calories: 180,
-    tags: ["Vegan", "Gluten-Free", "Quick"],
+    servings: 4,
   },
 };
 
+// ✅ FIXED EXPORTS
+
+export function getRecipe(id: string): Recipe | undefined {
+  return MOCK_RECIPES[id];
+}
+
 export async function generateRecipe(
-  request: GenerateRequest,
+  data: GenerateRequest
 ): Promise<Recipe> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
-
-    if (!response.ok) {
-      throw new Error("API failed");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.log("Using mock recipe fallback");
-    return MOCK_RECIPES["1"];
-  }
+  return {
+    id: "generated",
+    title: data.prompt,
+    description: "AI generated recipe (mock)",
+    image: "https://images.unsplash.com/photo-1498837167922-ddd27525d352",
+    ingredients: ["Ingredient 1", "Ingredient 2"],
+    instructions: ["Step 1", "Step 2"],
+    prepTime: "10 mins",
+    cookTime: "20 mins",
+    servings: 2,
+  };
 }
